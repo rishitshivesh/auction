@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Auctions{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="icon" href="https://imgur.com/BCTdTtt.png" type="image/png" >
+
+    </head>
+    <body style="padding:10px;">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href={% url 'index' %}>
+            <img src="https://imgur.com/JUIxk2R.png" width="50" height="50" alt="Image" loading="lazy">
+            
+        </a>
+        <div class="collapse navbar-collapse navbar navbar-light" id="navbarNavDropdown">
+
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}"><h5>AUCTIONS</h5></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'categories' %}">Active Categories</a>
+            </li>
+            {% if user.is_authenticated %}
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="{%url 'addlisting'%}">Add Listing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'viewwishlist' %}">Wishlist</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mywins' %}">My Wins</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+            {% endif %}
+        </ul>
+        </div>
+        <div class="float-right">
+            <img src="https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png" width = 30px>
+            {% if user.is_authenticated and user.first_name%}
+                Signed in as <strong><a href="{%url 'users' user.username%}">{{ user.first_name}} {{user.last_name}}</a></strong>.
+            {% elif user.is_authenticated and not user.first_name%}
+                Signed in as <strong><a href="{%url 'users' user.username%}">{{ user.username}}</a></strong>.
+            {% else %}
+                Not signed in.
+            {% endif %}
+        </div>
+        </nav>
+        <hr>
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>

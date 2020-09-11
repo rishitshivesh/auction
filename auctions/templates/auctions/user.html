@@ -1,0 +1,30 @@
+{%extends 'auctions/layout.html'%}
+
+{%block body%}
+    {%if bid_user.first_name%}
+    <h2>Auction Listings for {{bid_user.first_name}} {{bid_user.last_name}}</h2>    
+    {%else%}
+    <h2>Auction Listings for {{bid_user.username}}</h2>    
+    {%endif%}
+    <div class="flex-container" style = "display: flex;flex-wrap: wrap;justify-content: space-around;align-items: center;">
+    {%for item in listings%}
+    {%if item.listed%}
+    <div class="card" style="width: 20rem;">
+        <img src="{{item.url}}" class="card-img-top" alt="image">
+        <div class="card-body">
+            <h5 class="card-title">{{item.product_name}}</h5>
+            <p class="card-text text-truncate">{{item.description}}</p>
+            <p class="card-text"><small class="text-muted">Added : {{item.date}}</small></p>
+            <a href="{%url 'listings' item.id%}" class="btn btn-primary" align=>Go To Product Page</a>
+        </div>
+        </div>
+     {%endif%}
+     {%empty%}
+     {%if bid_user.first_name%}
+            <h2>No Entries Exist for {{bid_user.first_name}} {{bid_user.last_name}}</h2>
+     {%else%}
+            <h2>No Entries Exist for {{bid_user.username}}</h2>
+     {%endif%}
+    {%endfor%}
+    </div>
+{%endblock%}

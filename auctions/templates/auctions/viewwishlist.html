@@ -1,0 +1,29 @@
+{%extends 'auctions/layout.html'%}
+
+{%block body%}  
+    <div class="card">
+    <div class="card-body">
+    <center><h2>Wishlist for {{bid_user}}</h2> </center>
+    </div></div>   
+    <div class="flex-container" style = "display: flex;flex-wrap: wrap;justify-content: space-around;align-items: center;">
+    {%for item in listings%}
+    {%if item.product.listed %}
+    <div class="card" style="width: 20rem;">
+        <img src="{{item.product.url}}" class="card-img-top" alt="image">
+        <div class="card-body">
+            <h5 class="card-title">{{item.product.product_name}}</h5>
+            <p class="card-text text-truncate">{{item.prouct.description}}</p>
+            <p class="card-text"><small class="text-muted">Added : {{item.product.date}}</small></p>
+            <a href="{%url 'listings' item.product.id%}" class="btn btn-primary" align=>Go To Product Page</a>
+        </div>
+        </div>    
+     {%endif%}
+     {%empty%}
+     </div>
+     <center>
+            <img src="https://img.icons8.com/pastel-glyph/2x/empty-box.png"><br><br>
+            <h3>No Wishlist Exists for {{bid_user}}</h3>
+     </center>
+    {%endfor%}
+    
+{%endblock%}

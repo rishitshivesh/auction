@@ -1,0 +1,150 @@
+{%extends 'auctions/layout.html'%}
+{%block body%}
+    {% if product.listed == False and bid.user == user %} 
+	    	<div class="alert alert-success" role="alert">
+	    		Congrats! you have won this item in auction!, You may now contact the <a href="{%url 'users' product.bid_user%}">owner</a> for further details!
+	    	</div>
+	{% endif %}
+			
+
+    <div class="">
+    <div class="flex-container align-items-stretch" style = "display: flex;flex-wrap: wrap;justify-content: space-around;align-items: center;">
+        <div class="card " style="width: 20rem">
+            <img src="{{product.url}}" class="card-img-top" alt="Image">
+            <div class="card-body">
+                <p class="card-text">Added : {{product.date}}</p>
+                {% if user.is_authenticated %}
+                
+                    {%if not status%}
+                        <form method="POST" action = "{%url 'wishlist' product.id request.user.username%}">
+                        {% csrf_token %}
+                        <button type="submit" value="Add" class = "btn btn-outline-primary" {{state}} style ="width : 100%">Add to your Wishlist</button>
+                        </form> 
+                    {%else%}
+                        <form method="POST" action = "{%url 'deletewishlist' product.id%}">
+                        {% csrf_token %}
+                        <button type="submit" value="Add" class = "btn btn-outline-danger" {{state}} style ="width : 100%">Remove from your Wishlist</button>
+                        </form> 
+                    {%endif%}
+                {%endif%}
+            </div>
+        </div>
+
+        <div class="card w-75 p-3 ">
+            <div class="card-body">
+                {% comment %} {%for category in product.product_type%} {% endcomment %}
+                <a href ="{%url 'category' product.product_type %}"><button type="button" class="btn btn-outline-primary">{{product.product_type}}</button></a>
+                {% comment %} {%endfor%} {% endcomment %}
+                <h3 class="card-title">{{product.product_name}}</h3>
+                <p class="card-text">{{product.description}}
+                    <br>
+                    Added by : <a href="{%url 'users' product.bid_user%}">{{product.bid_user}}</a> 
+                        <h4>Current Price : ${{bid.bid}}</h4>
+
+                       
+
+                    {%if request.user.username == product.bid_user%}
+                        
+                        <div class="alert alert-primary" role="alert">
+                           {%if product.listed%}                    
+                           This Auction is doing well!
+                           {%else%}
+                           This Auction was won by {{bid.user.username}}
+                           {%endif%}
+                        </div>
+                        {%if product.listed%} 
+                        <a href ="{%url 'closeauction' product.id %}"><button type="button" class="btn btn-outline-warning">Close Auction</button></a>  
+                        {%endif%}
+                    {%else%}
+                        {% if user.is_authenticated %}
+                        <div class="form-group">
+                            <form action="{% url 'listings' product.id %}" method="post">
+                                {% csrf_token %}
+                                {% if product.listed %}
+                                    {{ form }}
+                                    <br>
+                                
+                                <center><input type="submit" value="Place Bid" class = "btn btn-success mx-auto"></center>
+                                {% else %}
+                                <center><input type="submit" value="Bidding Closed" class="btn btn-danger mx-auto" disabled="True"></center>
+                                {% endif %}
+                            </form>
+                        </div>
+                        {%if message%}
+                        <div class = "card-footer alert alert-{{type}}" role = "alert">
+                            {{message}}
+                        </div>
+                        {%endif%} 
+                    {%endif%}
+                    
+                    {%endif%}
+                    
+                </p>
+                
+            </div>
+                <ul>
+					    <li>
+							Starting Price : $ {{ product.price }}
+						</li>
+						<li>
+							Last Bidder: <a href="{%url 'users' bid.user.username%}">{{bid.user.username}}</a>
+						</li>
+				</ul>	
+        </div>
+        
+     
+
+    </div>
+    </div>
+    <hr>
+    <div class = "card mx-auto w-75 p-3">
+{% if user.is_authenticated %}
+    <div class="card w-90 p-3">
+        <h4 class="card title">Comment</h4>
+         {% if product.listed %}
+            <form method ="POST" action="{%url 'listings' product.id%}">
+            {% csrf_token %}
+            <div class="form-group">
+                {% comment %} <textarea class="form-control" name="comment" rows="3" placeholder="Comment here"></textarea> {% endcomment %}
+                {{comment}}
+            </div>
+            
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Commenting as </span>
+                </div>
+                {%if request.user.first_name%}
+                    <input type="text" class="form-control" name="username" value = "{{request.user.first_name}} {{request.user.last_name}}" readonly>
+                {%else%}
+                    <input type="text" class="form-control" name="username" value = "{{request.user.username}}" readonly>
+                {%endif%}
+            </div>
+
+            <input class="btn btn-primary" type="submit" value="Comment" name="Comment">
+
+            </form>
+        {%endif%}
+    </div>
+    <hr>
+{% endif %}
+    {%for comment in comments%}
+    <div class="card">
+        <div class="card-header">
+            {{comment.date}}
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+            <p>{{comment.comment}}</p>
+            {%if request.user.first_name%}
+            <footer class="blockquote-footer"><cite><a href="{%url 'users' comment.user%}">{{comment.user.first_name}} {{comment.user.last_name}}</a></cite></footer>
+            {%else%}
+            <footer class="blockquote-footer"><cite><a href="{%url 'users' comment.user%}">{{comment.user.username}}</a></cite></footer>
+            {%endif%}
+            </blockquote>
+        </div>
+    </div>
+    <hr>
+    {%endfor%}
+    
+{%endblock%}

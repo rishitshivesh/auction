@@ -1,0 +1,16 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+    <div class="card">
+    <div class="card-body">
+    <center>
+    <h2 align="center">Active Categories</h2>
+    </center>
+    </div></div>   
+    <br>
+    <div class="flex-container" style = "display: flex;flex-wrap: wrap;justify-content: space-around;align-items: center;">
+    {%for item in listings%}
+    <a href ="{%url 'category' item %}"><button type="button" class="btn btn-outline-primary">{{item}}</button></a>
+    {%endfor%}
+    </div>
+
+{% endblock %}
