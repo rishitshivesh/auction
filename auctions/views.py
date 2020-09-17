@@ -231,8 +231,12 @@ def addlisting(request):
         # bids = request.POST["bids"]
         bid_user = request.POST["username"]
         url = request.POST["url"]
+        if(url):
+            URL = url
+        else:
+            URL = "https://icon-library.com/images/products-icon-png/products-icon-png-25.jpg"
  #       category=Categories.objects.filter(id=request.POST["category"])
-        product = AuctionListings(product_name=product_name,description=description,product_type=product_type,price=price,bid_user=bid_user,url=url)
+        product = AuctionListings(product_name=product_name,description=description,product_type=product_type,price=price,bid_user=bid_user,url=URL)
         #product.category.add(category)
         product.save()
         bid = Bids(product=product,user=request.user,bid=product.price)

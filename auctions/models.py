@@ -14,7 +14,7 @@ class AuctionListings(models.Model):
     # bids = models.IntegerField
     #bid_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mybids")
     bid_user = models.CharField(max_length=64)
-    url = models.CharField(max_length=2000)
+    url = models.CharField(max_length=2000,default="https://icon-library.com/images/products-icon-png/products-icon-png-25.jpg")
     date = models.DateField(auto_now_add="True")
     listed = models.BooleanField(default=True)
 
