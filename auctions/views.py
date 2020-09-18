@@ -84,6 +84,7 @@ def register(request):
 @login_required(login_url='login')
 def listings(request,product_id,):
     product = AuctionListings.objects.get(pk=product_id)
+    adder = User.objects.get(username=product.bid_user)
     message = None
     msgtype= None
     if request.method=="POST":
@@ -114,6 +115,7 @@ def listings(request,product_id,):
             return render(request, "auctions/description.html",{
                 "product": product,
                 "bid": bids,
+                "adder" : adder,
                 "form": place_bid(),
                 "comment" : comment_form(),
                 "message": message,
@@ -141,6 +143,7 @@ def listings(request,product_id,):
     return render(request,"auctions/products.html",{
             "bid": bids,
             "form": place_bid(),
+            "adder" : adder,
             "product" : product,
             "comment" : comment_form(),
             "comments" : Comments.objects.filter(product=product).order_by('-date'),
